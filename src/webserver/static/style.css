@@ -1,0 +1,53 @@
+
+body {
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    font-family: Whitney, "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+#chat {
+    width: 100vw;
+    height: 90%;
+    flex-grow: 1;
+    overflow: scroll;
+}
+
+#message {
+    display: flex;
+}
+
+#text {
+    flex-grow: 1;
+    max-width: 90%;
+}
+
+#send {
+    min-width: 5rem;
+    width: 10%;
+}
+
+.message {
+    border: 1px solid gray;
+    padding: 0.4rem;
+    display: flex;
+  }
+
+.avatar {
+    border-radius: 50%;
+    width: 3rem;
+    height: 3rem;
+}
+
+.wrapper {
+    height: 100%;
+    margin-left: 1rem;
+}
+
+.username {
+    font-size: 15pt;
+    display: block;
+}
+
