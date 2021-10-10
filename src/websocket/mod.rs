@@ -1,7 +1,7 @@
 use std::thread;
 
-use ws::{Message as WSMessage, listen};
-use crate::channel::{ChannelElement, get_bot_channel, get_ws_channel, receive, send};
+use crate::channel::{get_bot_channel, get_ws_channel, receive, send, ChannelElement};
+use ws::{listen, Message as WSMessage};
 
 pub fn start() {
     tokio::spawn(async {
@@ -10,18 +10,16 @@ pub fn start() {
             if should_receive {
                 should_receive = false;
                 let clone = out.clone();
-                thread::spawn(move || {
-                    loop {
-                        let msg = receive(&get_ws_channel());
-                        if let Err(why) = clone.broadcast(serde_json::to_string(&msg).unwrap()) {
-                            eprintln!("{:?}", why);
-                        }
+                thread::spawn(move || loop {
+                    let msg = receive(&get_ws_channel());
+                    if let Err(why) = clone.broadcast(serde_json::to_string(&msg).unwrap()) {
+                        eprintln!("{:?}", why);
                     }
                 });
             }
 
             move |msg: WSMessage| {
-                match serde_json::from_str::<ChannelElement>(msg.to_string().as_str()) {
+                match serde_json::from_str::<ChannelElement>(&msg.to_string()) {
                     Ok(msg) => {
                         send(&get_bot_channel(), msg);
                     }
@@ -31,6 +29,7 @@ pub fn start() {
                 }
                 Ok(())
             }
-        }).expect("assim amigo... nao foi");
+        })
+        .expect("assim amigo... nao foi");
     });
 }

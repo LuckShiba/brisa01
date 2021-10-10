@@ -12,7 +12,7 @@ use serenity::{
 
 use crate::channel::{get_bot_channel, get_ws_channel, receive, send};
 
-const CHANNEL_ID: u64 = 829304052189757471;
+const CHANNEL_ID: u64 = 661423633960402948;
 
 pub async fn start() {
     let token = env::var("DISCORD_TOKEN").expect("cade o token mlk");
@@ -33,7 +33,7 @@ impl EventHandler for Handler {
             .http
             .get_channel(CHANNEL_ID)
             .await
-            .expect("cade a lixeira?????");
+            .expect("cade o canal?????");
 
         if let Channel::Guild(channel) = channel {
             let webhooks = channel.webhooks(&ctx).await.expect("cade os webhoko?");
