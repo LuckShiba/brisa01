@@ -1,18 +1,21 @@
-use std::{sync::{Arc, mpsc::{Receiver, Sender, channel}}};
+use std::sync::{
+    mpsc::{channel, Receiver, Sender},
+    Arc,
+};
 
+use serde::{Deserialize, Serialize};
 use serenity::model::channel::Message as DiscordMessage;
-use serde::{Serialize, Deserialize};
 
 #[derive(Serialize, Deserialize)]
 pub struct User {
     pub username: String,
-    pub avatar_url: String
+    pub avatar_url: String,
 }
 
 #[derive(Serialize, Deserialize)]
 pub struct Message {
     pub content: String,
-    pub author: User
+    pub author: User,
 }
 
 impl From<DiscordMessage> for Message {
@@ -20,11 +23,12 @@ impl From<DiscordMessage> for Message {
         Message {
             author: User {
                 username: val.author.tag(),
-                avatar_url: val.author
+                avatar_url: val
+                    .author
                     .avatar_url()
-                    .unwrap_or_else(|| val.author.default_avatar_url())
+                    .unwrap_or_else(|| val.author.default_avatar_url()),
             },
-            content: val.content
+            content: val.content,
         }
     }
 }
@@ -49,15 +53,11 @@ pub fn init() {
 }
 
 pub fn get_bot_channel() -> Channel {
-    unsafe {
-        BOT_CHANNEL.clone().unwrap()
-    }
+    unsafe { BOT_CHANNEL.clone().unwrap() }
 }
 
 pub fn get_ws_channel() -> Channel {
-    unsafe {
-        WS_CHANNEL.clone().unwrap()
-    }
+    unsafe { WS_CHANNEL.clone().unwrap() }
 }
 
 pub fn send(ch: &Channel, el: ChannelElement) {
